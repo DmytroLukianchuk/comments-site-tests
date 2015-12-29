@@ -1,5 +1,6 @@
-package com.lukianchuk.drivers;
+package com.lukianchuk.tests;
 
+import com.lukianchuk.drivers.Drivers;
 import org.junit.After;
 import org.junit.Test;
 
