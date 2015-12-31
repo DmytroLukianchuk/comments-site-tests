@@ -59,6 +59,17 @@ public class CreateCommentTest extends Drivers {
 
         System.out.println("Check that Comment field is erased");
         assertEquals("Comment field is not empty", "", findCommentTextField().getText());
+
+        System.out.println("Find added Comment by Number field within All Pages");
+        for (int pageNumber = 1; pageNumber <= 4; pageNumber++) {
+            if (checkCommentIsPresentOnPageNumber(VALID_NUMBER_VALUE, pageNumber)) {
+                break;
+            } else {
+                System.out.println("Sorry... your comment is not present on " + pageNumber + " Page. Trying to" +
+                        "find on the next Page");
+            }
+
+        }
     }
 
     @Test //#2

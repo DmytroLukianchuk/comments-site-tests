@@ -10,9 +10,9 @@ import static junit.framework.Assert.assertEquals;
 public class Drivers {
     public static final String MAIN_PAGE_URL = "http://comments.azurewebsites.net/";
     public static final String NEWCOMMENT_PAGE_URL = "http://comments.azurewebsites.net/Editor/NewComment";
-    public static final String VALID_COMMENT_TEXT = "111";
+    public static final String VALID_COMMENT_TEXT = "WWW";
     public static final String INVALID_COMMENT_TEXT = "*&^%$";
-    public static final String VALID_NUMBER_VALUE = "111";
+    public static final String VALID_NUMBER_VALUE = "999";
     public static final String INVALID_NUMBER_VALUE = "abcd";
     public static final String COMMENT_TEXT_EMPTY_ERROR = "The Comment Text field is required.";
     public static final String NUMBER_FIELD_VALUE_ERROR = "The Number field should contain value from 0 to 999 " +
@@ -94,6 +94,19 @@ public class Drivers {
         String errorText = driver.findElement(By.id("errorfield")).getText();
         assertEquals("Error is not appeared / correct", COMMENT_TEXT_NOT_ALPHA_NUM_ERROR,
                 errorText);
+    }
+
+    public boolean checkCommentIsPresentOnPageNumber(String VALID_NUMBER_VALUE, int pageNumber) {
+        driver.get("http://comments.azurewebsites.net/?page=" + pageNumber);
+        for (int lineCounter = 1; lineCounter < 10; lineCounter++) {
+            String currentNumber = driver.findElement(By.xpath("//tr[" + lineCounter + "]/td[2]")).getText();
+            if (currentNumber.equals(VALID_NUMBER_VALUE)) {
+                System.out.println("Your Comment " + VALID_COMMENT_TEXT + " is found on " + pageNumber + " Page and" +
+                        " on the " + lineCounter + " Line");
+                return true;
+            }
+        }
+        return false;
     }
 
 
