@@ -8,14 +8,34 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import static junit.framework.Assert.assertEquals;
 
 public class Drivers {
+    public static final String MAIN_PAGE_URL = "http://comments.azurewebsites.net/";
+    public static final String NEWCOMMENT_PAGE_URL = "http://comments.azurewebsites.net/Editor/NewComment";
+    public static final String VALID_COMMENT_TEXT = "111";
+    public static final String INVALID_COMMENT_TEXT = "*&^%$";
+    public static final String VALID_NUMBER_VALUE = "111";
+    public static final String INVALID_NUMBER_VALUE = "abcd";
+    public static final String COMMENT_TEXT_EMPTY_ERROR = "The Comment Text field is required.";
+    public static final String NUMBER_FIELD_VALUE_ERROR = "The Number field should contain value from 0 to 999 " +
+            "and should be unique";
+
+    public static final String COMMENT_TEXT_NOT_ALPHA_NUM_ERROR = "The Comment Text field should contain " +
+            "alphanumeric characters only";
+    public static final String COMMENT_MUST_HAVE_GROUP_ERROR = "Comments must be assigned to at least one category. " +
+            "Please select a category before trying to save this comment again.";
+
+
+
     public WebDriver driver = new FirefoxDriver();
 
+    // MAIN PAGE DRIVERS
     public void clickNewCommentButtonCheckUrl() {
         driver.findElement(By.xpath("//input[@value='New...']")).click();
         assertEquals("URL is incorrect", "http://comments.azurewebsites.net/Editor/NewComment",
                 driver.getCurrentUrl());
     }
 
+
+    // NEWCOMMENT PAGE DRIVERS
     public void clickSaveButtonLink() {
         driver.findElement(By.xpath("//input[@value='Save']")).click();
     }
@@ -28,27 +48,55 @@ public class Drivers {
         driver.findElement(By.xpath("//a[@href='/Editor/Refresh?idObj=0&baseid=0']")).click();
     }
 
+    public WebElement findCommentTextField() {
+        return driver.findElement(By.name("Text"));
+    }
+
+    public WebElement findNumberInput() {
+        return driver.findElement(By.xpath("//input[@id='Number']"));
+
+    }
+
+    public WebElement findCheckBoxN(int catN) {
+        return driver.findElement(By.xpath("//input[@id='Categories' and @value='" + catN + "']"));
+    }
+
+    public WebElement findMoveRightActionButton() {
+        return driver.findElement(By.xpath("//input[@name = 'CurSelect']"));
+    }
+
+
+    // GENERAL DRIVERS
     public void clickReturnButtonLink() {
         driver.findElement(By.xpath("//a[@href='/']")).click();
     }
 
-    // ERRORS ON COMMENTS PAGE
 
+    // ERRORS ON COMMENTS PAGE
     public void checkErrorCommentNotHaveCategory() {
         String errorText = driver.findElement(By.id("errorfield")).getText();
-        assertEquals("Error is not appeared / correct", "Comments must be assigned to at least one category. " +
-                "Please select a category before trying to save this comment again.", errorText);
+        assertEquals("Error is not appeared / correct", COMMENT_MUST_HAVE_GROUP_ERROR, errorText);
     }
 
     public void checkErrorCommentFieldRequired() {
-        String errorText = driver.findElement(By.xpath("//span[@htmlfor='Text']")).getText();
-        assertEquals("Error is not appeared / correct", "The Comment Text field is required.",
+        String errorText = driver.findElement(By.id("errorfield")).getText();
+        assertEquals("Error is not appeared / correct", COMMENT_TEXT_EMPTY_ERROR,
                 errorText);
     }
 
-    public WebElement findCommentTextField() {
-        return driver.findElement(By.name("Text"));
+    public void checkErrorNumberFieldNotValid() {
+        String errorText = driver.findElement(By.id("errorfield")).getText();
+        assertEquals("Error is not appeared / correct", NUMBER_FIELD_VALUE_ERROR,
+                errorText);
     }
+
+    public void checkcheckErrorNotCorrectCommentFieldValue() {
+        String errorText = driver.findElement(By.id("errorfield")).getText();
+        assertEquals("Error is not appeared / correct", COMMENT_TEXT_NOT_ALPHA_NUM_ERROR,
+                errorText);
+    }
+
+
 
 
 }
