@@ -1,15 +1,20 @@
 package com.lukianchuk.drivers;
 
+import org.junit.After;
+import org.junit.Before;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+
+import java.util.concurrent.TimeUnit;
 
 import static junit.framework.Assert.assertEquals;
 
 public class Drivers {
     public static final String MAIN_PAGE_URL = "http://comments.azurewebsites.net/";
     public static final String NEWCOMMENT_PAGE_URL = "http://comments.azurewebsites.net/Editor/NewComment";
+    public static final String DUPLICATE_PAGE_URL = "http://comments.azurewebsites.net/Editor/DuplicateComment";
     public static final String VALID_COMMENT_TEXT = "WWW";
     public static final String INVALID_COMMENT_TEXT = "*&^%$";
     public static final String VALID_NUMBER_VALUE = "999";
@@ -23,19 +28,34 @@ public class Drivers {
     public static final String COMMENT_MUST_HAVE_GROUP_ERROR = "Comments must be assigned to at least one category. " +
             "Please select a category before trying to save this comment again.";
 
-
-
+    public static final int NTH_COMMENT_CHECK_BOX = 1;
     public WebDriver driver = new FirefoxDriver();
 
-    // MAIN PAGE DRIVERS
+    @After
+    public void tearDown() throws Exception {
+        driver.close();
+
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+
+    }
+
+    // ********** MAIN PAGE DRIVERS
     public void clickNewCommentButtonCheckUrl() {
         driver.findElement(By.xpath("//input[@value='New...']")).click();
         assertEquals("URL is incorrect", "http://comments.azurewebsites.net/Editor/NewComment",
                 driver.getCurrentUrl());
     }
 
+    public String findNthCommentValue(int NTH_COMMENT_CHECK_BOX) {
+        return driver.findElement(By.xpath("//tr[" + NTH_COMMENT_CHECK_BOX + "]/td[3]")).getText();
+    }
 
-    // NEWCOMMENT PAGE DRIVERS
+
+    // ******* NEWCOMMENT PAGE DRIVERS
     public void clickSaveButtonLink() {
         driver.findElement(By.xpath("//input[@value='Save']")).click();
     }
@@ -66,13 +86,13 @@ public class Drivers {
     }
 
 
-    // GENERAL DRIVERS
+    // ******* GENERAL DRIVERS
     public void clickReturnButtonLink() {
         driver.findElement(By.xpath("//a[@href='/']")).click();
     }
 
 
-    // ERRORS ON COMMENTS PAGE
+    // ****** ERRORS ON COMMENTS PAGE
     public void checkErrorCommentNotHaveCategory() {
         String errorText = driver.findElement(By.id("errorfield")).getText();
         assertEquals("Error is not appeared / correct", COMMENT_MUST_HAVE_GROUP_ERROR, errorText);
@@ -107,6 +127,21 @@ public class Drivers {
             }
         }
         return false;
+    }
+
+
+    // ****** DUPLICATE PAGE
+    public void checkNthCommentCheckBox(int checkBox) {
+        driver.findElement(By.xpath("//input[@type='checkbox' and @value='" + checkBox + "']")).click();
+    }
+
+    public void clickDuplicateButtonLink() {
+        driver.findElement(By.xpath("//input[@value='Duplicate...']")).click();
+    }
+
+    public String getCommentsValueOnDuplicatePage() {
+        return driver.findElement(By.id("Text")).getAttribute("value");
+
     }
 
 

@@ -1,28 +1,14 @@
 package com.lukianchuk.tests;
 
 import com.lukianchuk.drivers.Drivers;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import java.util.concurrent.TimeUnit;
 
 import static junit.framework.Assert.assertEquals;
 
 public class CreateCommentTest extends Drivers {
 
 
-    @After
-    public void tearDown() throws Exception {
-        driver.close();
 
-    }
-
-    @Before
-    public void setUp() throws Exception {
-        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-
-    }
 
     // #1 Create Comments Positive Test (New > CText / Number / Cat / Save)
     // #2 Create Comment Negative Test > Empty Comment Text value (NewCommentUrl > Save)
@@ -32,7 +18,7 @@ public class CreateCommentTest extends Drivers {
 
 
     @Test //#1
-    public void createCommentPositiveTest() {
+    public void createCommentCheckItsAddedPositiveTest() {
         System.out.println(MAIN_PAGE_URL);
         driver.get(MAIN_PAGE_URL);
 
