@@ -1,10 +1,7 @@
 package com.lukianchuk.tests;
 
 import com.lukianchuk.drivers.Drivers;
-import org.junit.Before;
 import org.junit.Test;
-
-import java.util.concurrent.TimeUnit;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -14,13 +11,8 @@ public class DuplicateCommentTest extends Drivers {
 // #2 Negative > Check Alert not chosen any Comment
 // #3 Negative > Check Alert not chosen any Comment
 
-    @Before
-    public void setUp() throws Exception {
-        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-    }
-
-    @Test
-    public void checkDuplicateCommentLink() {
+    @Test //#1
+    public void checkDuplicateCommentLinkTest() {
         System.out.println(MAIN_PAGE_URL);
         driver.get(MAIN_PAGE_URL);
 
