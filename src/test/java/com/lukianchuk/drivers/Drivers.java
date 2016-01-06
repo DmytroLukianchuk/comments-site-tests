@@ -17,7 +17,7 @@ public class Drivers {
     public static final String MAIN_PAGE_URL = "http://comments.azurewebsites.net/";
     public static final String NEWCOMMENT_PAGE_URL = "http://comments.azurewebsites.net/Editor/NewComment";
     public static final String DUPLICATE_PAGE_URL = "http://comments.azurewebsites.net/Editor/DuplicateComment";
-    public static final String VALID_COMMENT_TEXT = "WWW";
+    public static final String VALID_COMMENT_TEXT = "0123";
     public static final String INVALID_COMMENT_TEXT = "*&^%$";
     public static final String VALID_NUMBER_VALUE = "999";
     public static final String INVALID_NUMBER_VALUE = "abcd";
@@ -75,6 +75,13 @@ public class Drivers {
 
     @FindBy(id = "Text")
     WebElement commentsFieldOnDuplicatePage;
+
+    @FindBy(id = "Number")
+    WebElement numberFieldValueOnDuplicatePage;
+
+    @FindBy(xpath = "//div[@role='dialog']")
+    WebElement commentAlert;
+
 
 
     public Drivers() {
@@ -141,10 +148,27 @@ public class Drivers {
         returnButton.click();
     }
 
+    public void findCommentByNumberAllPages() {
+        System.out.println("Find added Comment by Number field within All Pages");
+        for (int pageNumber = 1; pageNumber <= 4; pageNumber++) {
+            if (checkCommentIsPresentOnPageNumber(VALID_NUMBER_VALUE, pageNumber)) {
+                break;
+            } else {
+                System.out.println("Sorry... your comment is not present on " + pageNumber + " Page. Trying to" +
+                        "find on the next Page");
+            }
+        }
+    }
+
+    public boolean chechCommentAlertIsDisplayed() {
+        return commentAlert.isDisplayed();
+    }
+
 
     // ****** ERRORS ON COMMENTS PAGE
     public void checkErrorCommentNotHaveCategory() {
-        assertEquals("Error is not appeared / correct", COMMENT_MUST_HAVE_GROUP_ERROR, errorCommentNotHaveCategory.getText());
+        assertEquals("Error is not appeared / correct", COMMENT_MUST_HAVE_GROUP_ERROR,
+                errorCommentNotHaveCategory.getText());
     }
 
     public void checkErrorCommentFieldRequired() {
@@ -189,4 +213,10 @@ public class Drivers {
         return commentsFieldOnDuplicatePage.getAttribute("value");
 
     }
+
+    public String numberFieldValueOnDuplicatePage() {
+        return numberFieldValueOnDuplicatePage.getAttribute("value");
+
+    }
+
 }

@@ -7,15 +7,11 @@ import static junit.framework.Assert.assertEquals;
 
 public class CreateCommentTest extends Drivers {
 
-
-
-
     // #1 Create Comments Positive Test (New > CText / Number / Cat / Save)
     // #2 Create Comment Negative Test > Empty Comment Text value (NewCommentUrl > Save)
     // #3 Create Comment Negative Test > Number field error > 999 (NewCommentUrl > Enter 1000 to Number > Save)
     // #4 Create Comment Negative Test > No Categories assigned > (NewCommentUrl > Valid Comment > Valid Number > Save)
     // #5 Create Comment Negative Test > Not correct Comment Text value (NewCommentUrl > Incorrect Comment value > Save)
-
 
     @Test //#1
     public void createCommentCheckItsAddedPositiveTest() {
@@ -46,16 +42,7 @@ public class CreateCommentTest extends Drivers {
         System.out.println("Check that Comment field is erased");
         assertEquals("Comment field is not empty", "", findCommentTextField().getText());
 
-        System.out.println("Find added Comment by Number field within All Pages");
-        for (int pageNumber = 1; pageNumber <= 4; pageNumber++) {
-            if (checkCommentIsPresentOnPageNumber(VALID_NUMBER_VALUE, pageNumber)) {
-                break;
-            } else {
-                System.out.println("Sorry... your comment is not present on " + pageNumber + " Page. Trying to" +
-                        "find on the next Page");
-            }
-
-        }
+        findCommentByNumberAllPages();
     }
 
     @Test //#2
