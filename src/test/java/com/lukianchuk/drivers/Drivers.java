@@ -6,6 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +33,54 @@ public class Drivers {
     public static final int NTH_COMMENT_CHECK_BOX = 1;
     public WebDriver driver = new FirefoxDriver();
 
+
+    @FindBy(xpath = "//input[@value='New...']")
+    WebElement newCommentButton;
+
+    @FindBy(xpath = "//input[@value='Save']")
+    WebElement saveButtonLink;
+
+    @FindBy(xpath = "//input[@value='Save & Return']")
+    WebElement saveAndReturnButtonLink;
+
+    @FindBy(xpath = "//a[@href='/Editor/Refresh?idObj=0&baseid=0']")
+    WebElement refreshButtonLink;
+
+    @FindBy(name = "Text")
+    WebElement commentTextField;
+
+    @FindBy(xpath = "//input[@id='Number']")
+    WebElement numberInput;
+
+    @FindBy(xpath = "//input[@name = 'CurSelect']")
+    WebElement moveRightActionButton;
+
+    @FindBy(xpath = "//a[@href='/']")
+    WebElement returnButton;
+
+    @FindBy(id = "errorfield")
+    WebElement errorCommentNotHaveCategory;
+
+    @FindBy(id = "errorfield")
+    WebElement errorCommentFieldRequired;
+
+    @FindBy(id = "errorfield")
+    WebElement errorNumberFieldNotValid;
+
+    @FindBy(id = "errorfield")
+    WebElement errorNotCorrectCommentFieldValue;
+
+    @FindBy(xpath = "//input[@value='Duplicate...']")
+    WebElement duplicateButtonLink;
+
+    @FindBy(id = "Text")
+    WebElement commentsFieldOnDuplicatePage;
+
+
+    public Drivers() {
+        PageFactory.initElements(driver, this);
+    }
+
     @After
     public void tearDown() throws Exception {
         driver.close();
@@ -45,7 +95,7 @@ public class Drivers {
 
     // ********** MAIN PAGE DRIVERS
     public void clickNewCommentButtonCheckUrl() {
-        driver.findElement(By.xpath("//input[@value='New...']")).click();
+        newCommentButton.click();
         assertEquals("URL is incorrect", "http://comments.azurewebsites.net/Editor/NewComment",
                 driver.getCurrentUrl());
     }
@@ -57,23 +107,23 @@ public class Drivers {
 
     // ******* NEWCOMMENT PAGE DRIVERS
     public void clickSaveButtonLink() {
-        driver.findElement(By.xpath("//input[@value='Save']")).click();
+        saveButtonLink.click();
     }
 
     public void clickSaveAndReturnButtonLink() {
-        driver.findElement(By.xpath("//input[@value='Save & Return']")).click();
+        saveAndReturnButtonLink.click();
     }
 
     public void clickRefreshButtonLink() {
-        driver.findElement(By.xpath("//a[@href='/Editor/Refresh?idObj=0&baseid=0']")).click();
+        refreshButtonLink.click();
     }
 
     public WebElement findCommentTextField() {
-        return driver.findElement(By.name("Text"));
+        return commentTextField;
     }
 
     public WebElement findNumberInput() {
-        return driver.findElement(By.xpath("//input[@id='Number']"));
+        return numberInput;
 
     }
 
@@ -82,38 +132,34 @@ public class Drivers {
     }
 
     public WebElement findMoveRightActionButton() {
-        return driver.findElement(By.xpath("//input[@name = 'CurSelect']"));
+        return moveRightActionButton;
     }
 
 
     // ******* GENERAL DRIVERS
     public void clickReturnButtonLink() {
-        driver.findElement(By.xpath("//a[@href='/']")).click();
+        returnButton.click();
     }
 
 
     // ****** ERRORS ON COMMENTS PAGE
     public void checkErrorCommentNotHaveCategory() {
-        String errorText = driver.findElement(By.id("errorfield")).getText();
-        assertEquals("Error is not appeared / correct", COMMENT_MUST_HAVE_GROUP_ERROR, errorText);
+        assertEquals("Error is not appeared / correct", COMMENT_MUST_HAVE_GROUP_ERROR, errorCommentNotHaveCategory.getText());
     }
 
     public void checkErrorCommentFieldRequired() {
-        String errorText = driver.findElement(By.id("errorfield")).getText();
         assertEquals("Error is not appeared / correct", COMMENT_TEXT_EMPTY_ERROR,
-                errorText);
+                errorCommentFieldRequired.getText());
     }
 
     public void checkErrorNumberFieldNotValid() {
-        String errorText = driver.findElement(By.id("errorfield")).getText();
         assertEquals("Error is not appeared / correct", NUMBER_FIELD_VALUE_ERROR,
-                errorText);
+                errorNumberFieldNotValid.getText());
     }
 
     public void checkcheckErrorNotCorrectCommentFieldValue() {
-        String errorText = driver.findElement(By.id("errorfield")).getText();
         assertEquals("Error is not appeared / correct", COMMENT_TEXT_NOT_ALPHA_NUM_ERROR,
-                errorText);
+                errorNotCorrectCommentFieldValue.getText());
     }
 
     public boolean checkCommentIsPresentOnPageNumber(String VALID_NUMBER_VALUE, int pageNumber) {
@@ -136,15 +182,11 @@ public class Drivers {
     }
 
     public void clickDuplicateButtonLink() {
-        driver.findElement(By.xpath("//input[@value='Duplicate...']")).click();
+        duplicateButtonLink.click();
     }
 
     public String getCommentsValueOnDuplicatePage() {
-        return driver.findElement(By.id("Text")).getAttribute("value");
+        return commentsFieldOnDuplicatePage.getAttribute("value");
 
     }
-
-
-
-
 }
