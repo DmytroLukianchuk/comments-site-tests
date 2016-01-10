@@ -41,13 +41,16 @@ public class Drivers {
     @FindBy(xpath = "//input[@value='Edit...']")
     WebElement editCommentButton;
 
+    @FindBy(xpath = "//input[@value='Delete']")
+    WebElement deleteCommentButton;
+
     @FindBy(xpath = "//input[@value='Save']")
     WebElement saveButtonLink;
 
     @FindBy(xpath = "//input[@value='Save & Return']")
     WebElement saveAndReturnButtonLink;
 
-    @FindBy(xpath = "//a[@href='/Editor/Refresh?idObj=0&baseid=0']")
+    @FindBy(xpath = "//a[@href='/']")
     WebElement refreshButtonLink;
 
     @FindBy(name = "Text")
@@ -83,6 +86,9 @@ public class Drivers {
     @FindBy(id = "Number")
     WebElement numberFieldValueOnDuplicatePage;
 
+    @FindBy(id = "infoField")
+    WebElement commentDeletedSuccessfull;
+
     @FindBy(xpath = "//div[@role='dialog']")
     WebElement commentAlert;
 
@@ -106,6 +112,9 @@ public class Drivers {
 
     @FindBy(xpath = "//tr/td[3]")
     List<WebElement> commentText;
+
+    @FindBy(xpath = "//span[@class='ui-button-text']")
+    List<WebElement> alertButtonsOnDeleteAlert;
 
 
 
@@ -143,6 +152,11 @@ public class Drivers {
         }
     }
 
+    public void clickDeleteCommentButtonCheckAlert() {
+        deleteCommentButton.click();
+        assertTrue("Element is not present / displayed", chechCommentAlertIsDisplayed());
+    }
+
     public String getNthCatValueOfNthComment(int NTH_COMMENT_CHECK_BOX) {
         return categoriesOfComment.get(NTH_COMMENT_CHECK_BOX).getText();
     }
@@ -151,6 +165,25 @@ public class Drivers {
         return nthCommentValue.get(NTH_COMMENT_CHECK_BOX).getText();
     }
 
+    public void clickYesOrNoButtonOnAlert(String alertButton) {
+        if (alertButton.equals("Yes")) {
+            alertButtonsOnDeleteAlert.get(0).click();
+        } else if (alertButton.equals("No")) {
+            alertButtonsOnDeleteAlert.get(1).click();
+        } else {
+            System.out.println("You have not specified Yes or No");
+        }
+    }
+
+    public boolean checkCommentDeletedSuccessfull() {
+        if (commentDeletedSuccessfull.isDisplayed()) {
+            System.out.println("Green line appeared - comment is deleted");
+            return true;
+        } else {
+            System.out.println("Green line did NOT appear");
+            return false;
+        }
+    }
 
     // ******* NEWCOMMENT PAGE DRIVERS
     public void clickSaveButtonLink() {

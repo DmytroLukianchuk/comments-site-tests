@@ -12,7 +12,7 @@ public class EditCommentTest extends Drivers {
     // #2 - Check the dialog alert (comment was not chosen)
 
     @Test //#1
-    public void checkCommentsApplicationDialogTest() {
+    public void checkCommentsApplicationDialogOnEditLinkTest() {
         System.out.println("Open Main Page");
         driver.get(MAIN_PAGE_URL);
 
