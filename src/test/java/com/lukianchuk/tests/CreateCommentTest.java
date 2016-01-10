@@ -30,8 +30,8 @@ public class CreateCommentTest extends Drivers {
         findNumberInput().sendKeys(VALID_NUMBER_VALUE);
 
         System.out.println("Check CatN check-box");
-        findCheckBoxN(2).click();
-        findCheckBoxN(3).click();
+        clickAvailableCatCheckBox(2);
+        clickAvailableCatCheckBox(3);
 
         System.out.println("Click > button to move Cat");
         findMoveRightActionButton().click();

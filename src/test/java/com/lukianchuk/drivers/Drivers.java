@@ -1,41 +1,45 @@
 package com.lukianchuk.drivers;
 
-import org.junit.After;
 import org.junit.Before;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 public class Drivers {
     public static final String MAIN_PAGE_URL = "http://comments.azurewebsites.net/";
     public static final String NEWCOMMENT_PAGE_URL = "http://comments.azurewebsites.net/Editor/NewComment";
     public static final String DUPLICATE_PAGE_URL = "http://comments.azurewebsites.net/Editor/DuplicateComment";
+    public static final String EDIT_NEW_COMMENT_URL = "http://comments.azurewebsites.net/Editor/NewComment";
     public static final String VALID_COMMENT_TEXT = "0123";
     public static final String INVALID_COMMENT_TEXT = "*&^%$";
     public static final String VALID_NUMBER_VALUE = "999";
     public static final String INVALID_NUMBER_VALUE = "abcd";
     public static final String COMMENT_TEXT_EMPTY_ERROR = "The Comment Text field is required.";
+
     public static final String NUMBER_FIELD_VALUE_ERROR = "The Number field should contain value from 0 to 999 " +
             "and should be unique";
-
     public static final String COMMENT_TEXT_NOT_ALPHA_NUM_ERROR = "The Comment Text field should contain " +
             "alphanumeric characters only";
+
     public static final String COMMENT_MUST_HAVE_GROUP_ERROR = "Comments must be assigned to at least one category. " +
             "Please select a category before trying to save this comment again.";
-
-    public static final int NTH_COMMENT_CHECK_BOX = 1;
+    public static final int NTH_COMMENT_CHECK_BOX = 9;
     public WebDriver driver = new FirefoxDriver();
 
 
     @FindBy(xpath = "//input[@value='New...']")
     WebElement newCommentButton;
+
+    @FindBy(xpath = "//input[@value='Edit...']")
+    WebElement editCommentButton;
 
     @FindBy(xpath = "//input[@value='Save']")
     WebElement saveButtonLink;
@@ -82,17 +86,38 @@ public class Drivers {
     @FindBy(xpath = "//div[@role='dialog']")
     WebElement commentAlert;
 
+    @FindBy(xpath = "//div[@id='selectedCategories']/div[@class='categoryitem']")
+    List<WebElement> selectedCategoriesOnEditCommentPage;
+
+    @FindBy(xpath = "//input[@type='checkbox']")
+    List<WebElement> catCheckboxes;
+
+    @FindBy(xpath = "//tr/td[5]")
+    List<WebElement> categoriesOfComment;
+
+    @FindBy(xpath = "//tr/td[3]")
+    List<WebElement> nthCommentValue;
+
+    @FindBy(xpath = "//input[@type='checkbox' and @id='Categories']")
+    List<WebElement> availableCatCheckBoxes;
+
+    @FindBy(xpath = "//tr/td[2]")
+    List<WebElement> numbers;
+
+    @FindBy(xpath = "//tr/td[3]")
+    List<WebElement> commentText;
+
 
 
     public Drivers() {
         PageFactory.initElements(driver, this);
     }
 
-    @After
-    public void tearDown() throws Exception {
-        driver.close();
-
-    }
+//    @After
+//    public void tearDown() throws Exception {
+//        driver.close();
+//
+//    }
 
     @Before
     public void setUp() throws Exception {
@@ -103,12 +128,27 @@ public class Drivers {
     // ********** MAIN PAGE DRIVERS
     public void clickNewCommentButtonCheckUrl() {
         newCommentButton.click();
-        assertEquals("URL is incorrect", "http://comments.azurewebsites.net/Editor/NewComment",
+        assertEquals("URL is incorrect", EDIT_NEW_COMMENT_URL,
                 driver.getCurrentUrl());
     }
 
+    public void clickEditCommentButtonCheckUrlOrAlert() {
+        editCommentButton.click();
+        if (driver.getCurrentUrl().equals(MAIN_PAGE_URL)) {
+            System.out.println("Checking dialog alert appears");
+            assertTrue("Element is not present / displayed", chechCommentAlertIsDisplayed());
+        } else {
+            assertEquals("URL is incorrect", "http://comments.azurewebsites.net/Editor/EditComment",
+                    driver.getCurrentUrl());
+        }
+    }
+
+    public String getNthCatValueOfNthComment(int NTH_COMMENT_CHECK_BOX) {
+        return categoriesOfComment.get(NTH_COMMENT_CHECK_BOX).getText();
+    }
+
     public String findNthCommentValue(int NTH_COMMENT_CHECK_BOX) {
-        return driver.findElement(By.xpath("//tr[" + NTH_COMMENT_CHECK_BOX + "]/td[3]")).getText();
+        return nthCommentValue.get(NTH_COMMENT_CHECK_BOX).getText();
     }
 
 
@@ -117,8 +157,10 @@ public class Drivers {
         saveButtonLink.click();
     }
 
-    public void clickSaveAndReturnButtonLink() {
+    public void clickSaveAndReturnButtonLinkCheckUrlMain() {
         saveAndReturnButtonLink.click();
+        assertEquals("URL is not Main", "http://comments.azurewebsites.net/",
+                driver.getCurrentUrl());
     }
 
     public void clickRefreshButtonLink() {
@@ -134,8 +176,8 @@ public class Drivers {
 
     }
 
-    public WebElement findCheckBoxN(int catN) {
-        return driver.findElement(By.xpath("//input[@id='Categories' and @value='" + catN + "']"));
+    public void clickAvailableCatCheckBox(int catN) {
+        availableCatCheckBoxes.get(catN).click();
     }
 
     public WebElement findMoveRightActionButton() {
@@ -151,7 +193,19 @@ public class Drivers {
     public void findCommentByNumberAllPages() {
         System.out.println("Find added Comment by Number field within All Pages");
         for (int pageNumber = 1; pageNumber <= 4; pageNumber++) {
-            if (checkCommentIsPresentOnPageNumber(VALID_NUMBER_VALUE, pageNumber)) {
+            if (checkNumberIsPresentOnPageNumber(VALID_NUMBER_VALUE, pageNumber)) {
+                break;
+            } else {
+                System.out.println("Sorry... your comment is not present on " + pageNumber + " Page. Trying to" +
+                        "find on the next Page");
+            }
+        }
+    }
+
+    public void findCommentByCommentAllPages() {
+        System.out.println("Find added Comment by Comment field within All Pages");
+        for (int pageNumber = 1; pageNumber <= 4; pageNumber++) {
+            if (checkCommentIsPresentOnPageNumber(VALID_COMMENT_TEXT, pageNumber)) {
                 break;
             } else {
                 System.out.println("Sorry... your comment is not present on " + pageNumber + " Page. Trying to" +
@@ -186,11 +240,26 @@ public class Drivers {
                 errorNotCorrectCommentFieldValue.getText());
     }
 
-    public boolean checkCommentIsPresentOnPageNumber(String VALID_NUMBER_VALUE, int pageNumber) {
+    public boolean checkNumberIsPresentOnPageNumber(String VALID_NUMBER_VALUE, int pageNumber) {
         driver.get("http://comments.azurewebsites.net/?page=" + pageNumber);
-        for (int lineCounter = 1; lineCounter < 10; lineCounter++) {
-            String currentNumber = driver.findElement(By.xpath("//tr[" + lineCounter + "]/td[2]")).getText();
+
+        for (int lineCounter = 0; lineCounter < 10; lineCounter++) {
+            String currentNumber = numbers.get(lineCounter).getText();
             if (currentNumber.equals(VALID_NUMBER_VALUE)) {
+                System.out.println("Your Comment " + VALID_COMMENT_TEXT + " is found on " + pageNumber + " Page and" +
+                        " on the " + lineCounter + " Line");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkCommentIsPresentOnPageNumber(String VALID_COMMENT_TEXT, int pageNumber) {
+        driver.get("http://comments.azurewebsites.net/?page=" + pageNumber);
+
+        for (int lineCounter = 0; lineCounter < 10; lineCounter++) {
+            String currentNumber = commentText.get(lineCounter).getText();
+            if (currentNumber.equals(VALID_COMMENT_TEXT)) {
                 System.out.println("Your Comment " + VALID_COMMENT_TEXT + " is found on " + pageNumber + " Page and" +
                         " on the " + lineCounter + " Line");
                 return true;
@@ -202,7 +271,7 @@ public class Drivers {
 
     // ****** DUPLICATE PAGE
     public void checkNthCommentCheckBox(int checkBox) {
-        driver.findElement(By.xpath("//input[@type='checkbox' and @value='" + checkBox + "']")).click();
+        catCheckboxes.get(checkBox).click();
     }
 
     public void clickDuplicateButtonLink() {
@@ -217,6 +286,19 @@ public class Drivers {
     public String numberFieldValueOnDuplicatePage() {
         return numberFieldValueOnDuplicatePage.getAttribute("value");
 
+    }
+
+
+    // ***** EDIT COMMENT PAGE
+    public String getSelectedCatValueOnEditCommentPage() {
+        String result = "";
+        for (WebElement selectedCategory : selectedCategoriesOnEditCommentPage) {
+            if (!result.isEmpty()) {
+                result += ", ";
+            }
+            result += selectedCategory.getText();
+        }
+        return result;
     }
 
 }

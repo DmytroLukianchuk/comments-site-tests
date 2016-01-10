@@ -71,7 +71,7 @@ public class DuplicateCommentTest extends Drivers {
         findNumberInput().sendKeys(VALID_NUMBER_VALUE);
 
         System.out.println("Click on Save & Return button link");
-        clickSaveAndReturnButtonLink();
+        clickSaveAndReturnButtonLinkCheckUrlMain();
 
         System.out.println("Check user is on the Main Page " + MAIN_PAGE_URL);
         assertEquals("URL is not Main", MAIN_PAGE_URL, driver.getCurrentUrl());
