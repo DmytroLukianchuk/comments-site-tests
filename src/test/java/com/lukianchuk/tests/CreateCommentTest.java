@@ -7,12 +7,6 @@ import static junit.framework.Assert.assertEquals;
 
 public class CreateCommentTest extends Drivers {
 
-    // #1 Create Comments Positive Test (New > CText / Number / Cat / Save)
-    // #2 Create Comment Negative Test > Empty Comment Text value (NewCommentUrl > Save)
-    // #3 Create Comment Negative Test > Number field error > 999 (NewCommentUrl > Enter 1000 to Number > Save)
-    // #4 Create Comment Negative Test > No Categories assigned > (NewCommentUrl > Valid Comment > Valid Number > Save)
-    // #5 Create Comment Negative Test > Not correct Comment Text value (NewCommentUrl > Incorrect Comment value > Save)
-
     @Test //#1
     public void createCommentCheckItsAddedPositiveTest() {
         System.out.println(MAIN_PAGE_URL);

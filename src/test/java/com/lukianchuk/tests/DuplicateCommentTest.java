@@ -10,10 +10,6 @@ import static junit.framework.Assert.assertTrue;
 public class DuplicateCommentTest extends Drivers {
     private WebElement commentAlert;
 
-// #1 Positive > Click on Duplicate > Check URL & Copy of + Comment
-// #2 Negative > Check Alert not chosen any Comment
-// #3 Negative > Check Alert not chosen any Comment
-
     private String duplicateCommentPreconditions() {
         System.out.println(MAIN_PAGE_URL);
         driver.get(MAIN_PAGE_URL);

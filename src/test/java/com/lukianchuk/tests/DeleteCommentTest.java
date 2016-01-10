@@ -5,9 +5,6 @@ import org.junit.Test;
 
 public class DeleteCommentTest extends Drivers {
 
-    // #1 - Check the dialog alert (comment was not chosen)
-    // #2 - Check the dialog alert (comment was not chosen)
-
     public String deleteCommentPreconditions() {
         System.out.println("Open Main Page");
         driver.get(MAIN_PAGE_URL);

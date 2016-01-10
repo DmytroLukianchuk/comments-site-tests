@@ -3,7 +3,7 @@ package com.lukianchuk.tests;
 import com.lukianchuk.drivers.Drivers;
 import org.junit.Test;
 
-public class refreshPageTest extends Drivers {
+public class RefreshPageTest extends Drivers {
 
     @Test
     public void refreshPageWithPageButtonTest() {

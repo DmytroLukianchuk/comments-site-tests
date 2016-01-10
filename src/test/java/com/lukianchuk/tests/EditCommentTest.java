@@ -8,9 +8,6 @@ import static junit.framework.Assert.assertTrue;
 
 public class EditCommentTest extends Drivers {
 
-    // #1 - Check the dialog alert (comment was not chosen)
-    // #2 - Check the dialog alert (comment was not chosen)
-
     @Test //#1
     public void checkCommentsApplicationDialogOnEditLinkTest() {
         System.out.println("Open Main Page");
