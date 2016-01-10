@@ -1,5 +1,6 @@
 package com.lukianchuk.drivers;
 
+import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,103 +34,78 @@ public class Drivers {
             "Please select a category before trying to save this comment again.";
     public static final int NTH_COMMENT_CHECK_BOX = 9;
     public WebDriver driver = new FirefoxDriver();
-
-
+    @FindBy(xpath = "//th/a[contains(@href,'/?sort=Number')]")
+    protected WebElement numberLinkColumnFilter;
+    @FindBy(xpath = "//th/a[contains(@href,'/?sort=Text')]")
+    protected WebElement commentTextLinkColumnFilter;
+    @FindBy(xpath = "//th/a[contains(@href,'/?sort=Active')]")
+    protected WebElement activeLinkColumnFilter;
     @FindBy(xpath = "//input[@value='New...']")
     WebElement newCommentButton;
-
     @FindBy(xpath = "//input[@value='Edit...']")
     WebElement editCommentButton;
-
     @FindBy(xpath = "//input[@value='Delete']")
     WebElement deleteCommentButton;
-
     @FindBy(xpath = "//input[@value='Save']")
     WebElement saveButtonLink;
-
     @FindBy(xpath = "//input[@value='Save & Return']")
     WebElement saveAndReturnButtonLink;
-
     @FindBy(xpath = "//a[@href='/']")
     WebElement refreshButtonLink;
-
     @FindBy(name = "Text")
     WebElement commentTextField;
-
     @FindBy(xpath = "//input[@id='Number']")
     WebElement numberInput;
-
     @FindBy(xpath = "//input[@name = 'CurSelect']")
     WebElement moveRightActionButton;
-
     @FindBy(xpath = "//a[@href='/']")
     WebElement returnButton;
-
     @FindBy(id = "errorfield")
     WebElement errorCommentNotHaveCategory;
-
     @FindBy(id = "errorfield")
     WebElement errorCommentFieldRequired;
-
     @FindBy(id = "errorfield")
     WebElement errorNumberFieldNotValid;
-
     @FindBy(id = "errorfield")
     WebElement errorNotCorrectCommentFieldValue;
-
     @FindBy(xpath = "//input[@value='Duplicate...']")
     WebElement duplicateButtonLink;
-
     @FindBy(id = "Text")
     WebElement commentsFieldOnDuplicatePage;
-
     @FindBy(id = "Number")
     WebElement numberFieldValueOnDuplicatePage;
-
     @FindBy(id = "infoField")
     WebElement commentDeletedSuccessfull;
-
     @FindBy(xpath = "//div[@role='dialog']")
     WebElement commentAlert;
-
     @FindBy(xpath = "//div[@id='selectedCategories']/div[@class='categoryitem']")
     List<WebElement> selectedCategoriesOnEditCommentPage;
-
     @FindBy(xpath = "//input[@type='checkbox']")
     List<WebElement> catCheckboxes;
-
     @FindBy(xpath = "//tr/td[5]")
     List<WebElement> categoriesOfComment;
-
     @FindBy(xpath = "//tr/td[3]")
     List<WebElement> nthCommentValue;
-
     @FindBy(xpath = "//input[@type='checkbox' and @id='Categories']")
     List<WebElement> availableCatCheckBoxes;
-
     @FindBy(xpath = "//tr/td[2]")
     List<WebElement> numbers;
-
     @FindBy(xpath = "//tr/td[3]")
     List<WebElement> commentText;
-
     @FindBy(xpath = "//span[@class='ui-button-text']")
     List<WebElement> alertButtonsOnDeleteAlert;
-
     @FindBy(xpath = "//div/h1")
     WebElement h1CommentsText;
-
-
 
     public Drivers() {
         PageFactory.initElements(driver, this);
     }
 
-//    @After
-//    public void tearDown() throws Exception {
-//        driver.close();
-//
-//    }
+    @After
+    public void tearDown() throws Exception {
+        driver.close();
+
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -169,12 +145,16 @@ public class Drivers {
     }
 
     public void clickYesOrNoButtonOnAlert(String alertButton) {
-        if (alertButton.equals("Yes")) {
-            alertButtonsOnDeleteAlert.get(0).click();
-        } else if (alertButton.equals("No")) {
-            alertButtonsOnDeleteAlert.get(1).click();
-        } else {
-            System.out.println("You have not specified Yes or No");
+        switch (alertButton) {
+            case "Yes":
+                alertButtonsOnDeleteAlert.get(0).click();
+                break;
+            case "No":
+                alertButtonsOnDeleteAlert.get(1).click();
+                break;
+            default:
+                System.out.println("You have not specified Yes or No");
+                break;
         }
     }
 
@@ -187,6 +167,54 @@ public class Drivers {
             return false;
         }
     }
+
+//    private boolean isSorted(List<? extends Comparable> list, boolean asc) {
+//        for (int i = 0; i < list.size() - 1; i++) {
+//            if (asc && (list.get(i).compareTo(list.get(i + 1))) > 0) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
+
+    public void clickNumberORCommentORActiveFilterCheckUrl(int clickCounter, WebElement numberORCommentORActive,
+                                                           boolean isCommentField) {
+
+        int i = 0;
+        while (i < clickCounter) {
+            numberORCommentORActive.click();
+            i++;
+        }
+        String partualURL;
+        if (numberORCommentORActive.equals(numberLinkColumnFilter)) {
+            partualURL = "NumberValue&Text";
+        } else if (numberORCommentORActive.equals(commentTextLinkColumnFilter)) {
+            partualURL = "Text&Text";
+        } else {
+            partualURL = "Active&Text";
+        }
+
+
+        if (clickCounter % 2 == 1 ^ isCommentField) {
+            assertEquals("Url is not correct", MAIN_PAGE_URL + "?sort=" + partualURL + "=ASC", driver.getCurrentUrl());
+//            isSorted(listOfInts, true);
+
+        } else {
+            assertEquals("Url is not correct", MAIN_PAGE_URL + "?sort=" + partualURL + "=DESC", driver.getCurrentUrl());
+        }
+
+//        List<Integer> listOfInts = numbers.stream().map(e -> Integer.valueOf(e.getText())).collect(Collectors.toList());
+//        List<String> listOfStrings = numbers.stream().map(WebElement::getText).collect(Collectors.toList());
+
+//        Integer a = 1, b = 2;
+//        String as = "1", bs = "2";
+//        if (a.compareTo(b) < 0) {
+//            System.out.println("a is smaller than b");
+//        }
+//        as.compareTo(bs);
+    }
+
+
 
     // ******* NEWCOMMENT PAGE DRIVERS
     public void clickSaveButtonLink() {

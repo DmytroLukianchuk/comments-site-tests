@@ -64,6 +64,7 @@ public class DuplicateCommentTest extends Drivers {
         duplicateCommentPreconditions();
 
         System.out.println("Enter Unique Number Value > " + VALID_NUMBER_VALUE);
+        findNumberInput().clear();
         findNumberInput().sendKeys(VALID_NUMBER_VALUE);
 
         System.out.println("Click on Save & Return button link");
