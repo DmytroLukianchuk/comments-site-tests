@@ -2,11 +2,13 @@ package com.lukianchuk.drivers;
 
 import org.junit.After;
 import org.junit.Before;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -25,6 +27,9 @@ public class Drivers {
     public static final String INVALID_NUMBER_VALUE = "abcd";
     public static final String COMMENT_TEXT_EMPTY_ERROR = "The Comment Text field is required.";
 
+    public static final String CATEGORY_NAME_DROPDOWN = "Cat1";
+    public static final String STATUS_DROPDOWN = "All";
+
     public static final String NUMBER_FIELD_VALUE_ERROR = "The Number field should contain value from 0 to 999 " +
             "and should be unique";
     public static final String COMMENT_TEXT_NOT_ALPHA_NUM_ERROR = "The Comment Text field should contain " +
@@ -40,6 +45,16 @@ public class Drivers {
     protected WebElement commentTextLinkColumnFilter;
     @FindBy(xpath = "//th/a[contains(@href,'/?sort=Active')]")
     protected WebElement activeLinkColumnFilter;
+    @FindBy(xpath = "//tr/td[@class='categorycolumn']")
+    protected List<WebElement> categoriesValueColumn;
+    @FindBy(id = "SelectedCateg")
+    protected WebElement categoryNameDropDown;
+    @FindBy(id = "SelectedStatus")
+    protected WebElement statusDropDown;
+    @FindBy(id = "applybutton")
+    protected WebElement applyButton;
+    @FindBy(xpath = "//tr/td[@class='inactivecolumn']")
+    protected List<WebElement> activeColumn;
     @FindBy(xpath = "//input[@value='New...']")
     WebElement newCommentButton;
     @FindBy(xpath = "//input[@value='Edit...']")
@@ -114,6 +129,48 @@ public class Drivers {
     }
 
     // ********** MAIN PAGE DRIVERS
+    public boolean checkCategoriesHaveFilteringValue(String CATEGORY_NAME_DROPDOWN) {
+        for (int i = 1; i <= 10; i++) {
+            String commentRow = driver.findElement(By.xpath("//tr[" + i
+                    + "]/td[@class='categorycolumn']")).getText();
+            System.out.println(commentRow);
+            if (!commentRow.contains(CATEGORY_NAME_DROPDOWN)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean checkActiveColumnValue(String STATUS_DROPDOWN) {
+        for (int i = 0; i < activeColumn.size() - 1; i++) {
+            if (STATUS_DROPDOWN.equals("Inactive")) {
+                System.out.println(activeColumn.get(i).getText()); // debug
+                if (!activeColumn.get(i).getText().isEmpty()) {
+                    System.out.println("I've found Status as ACTIVE");
+                    return false;
+                }
+            } else if (STATUS_DROPDOWN.equals("Active")) {
+                System.out.println(activeColumn.get(i).getText()); // debug
+                if (activeColumn.get(i).getText().isEmpty()) {
+                    System.out.println("I've found Status as INACTIVE");
+                    return false;
+                }
+            }
+            System.out.println(activeColumn.get(i).getText()); // debug
+        }
+        return true;
+    }
+
+    public void chooseCategoryNameDropDown(String CATEGORY_NAME_DROPDOWN) {
+        Select droplist = new Select(categoryNameDropDown);
+        droplist.selectByVisibleText(CATEGORY_NAME_DROPDOWN);
+    }
+
+    public void chooseStatusNameDropDown(String STATUS_DROPDOWN) {
+        Select droplist = new Select(statusDropDown);
+        droplist.selectByVisibleText(STATUS_DROPDOWN);
+    }
+
     public void clickNewCommentButtonCheckUrl() {
         newCommentButton.click();
         assertEquals("URL is incorrect", EDIT_NEW_COMMENT_URL,
