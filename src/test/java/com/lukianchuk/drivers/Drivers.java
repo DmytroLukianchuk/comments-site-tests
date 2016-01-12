@@ -30,6 +30,9 @@ public class Drivers {
     public static final String CATEGORY_NAME_DROPDOWN = "Cat1";
     public static final String STATUS_DROPDOWN = "All";
 
+    public static final String SELECT_AN_ACTION = "Activate";
+
+
     public static final String NUMBER_FIELD_VALUE_ERROR = "The Number field should contain value from 0 to 999 " +
             "and should be unique";
     public static final String COMMENT_TEXT_NOT_ALPHA_NUM_ERROR = "The Comment Text field should contain " +
@@ -37,6 +40,7 @@ public class Drivers {
 
     public static final String COMMENT_MUST_HAVE_GROUP_ERROR = "Comments must be assigned to at least one category. " +
             "Please select a category before trying to save this comment again.";
+    public static final String COMMENT_WAS_ACTIVETED_MESSAGE = "Comments was activated successfull";
     public static final int NTH_COMMENT_CHECK_BOX = 9;
     public WebDriver driver = new FirefoxDriver();
     @FindBy(xpath = "//th/a[contains(@href,'/?sort=Number')]")
@@ -49,12 +53,18 @@ public class Drivers {
     protected List<WebElement> categoriesValueColumn;
     @FindBy(id = "SelectedCateg")
     protected WebElement categoryNameDropDown;
+
+    @FindBy(id = "commandSelect")
+    protected WebElement selectAnAction;
+
     @FindBy(id = "SelectedStatus")
     protected WebElement statusDropDown;
     @FindBy(id = "applybutton")
     protected WebElement applyButton;
     @FindBy(xpath = "//tr/td[@class='inactivecolumn']")
     protected List<WebElement> activeColumn;
+    @FindBy(id = "infoField")
+    protected WebElement commentWasActivatedInactivatedSuccessful;
     @FindBy(xpath = "//input[@value='New...']")
     WebElement newCommentButton;
     @FindBy(xpath = "//input[@value='Edit...']")
@@ -164,6 +174,11 @@ public class Drivers {
     public void chooseCategoryNameDropDown(String CATEGORY_NAME_DROPDOWN) {
         Select droplist = new Select(categoryNameDropDown);
         droplist.selectByVisibleText(CATEGORY_NAME_DROPDOWN);
+    }
+
+    public void slectAnActionDropDown(String SELECT_AN_ACTION) {
+        Select droplist = new Select(selectAnAction);
+        droplist.selectByVisibleText(SELECT_AN_ACTION);
     }
 
     public void chooseStatusNameDropDown(String STATUS_DROPDOWN) {
