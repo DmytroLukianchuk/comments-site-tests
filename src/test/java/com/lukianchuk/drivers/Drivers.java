@@ -127,13 +127,11 @@ public class Drivers {
     @After
     public void tearDown() throws Exception {
         driver.close();
-
     }
 
     @Before
     public void setUp() throws Exception {
         driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-
     }
 
     // ********** MAIN PAGE DRIVERS
@@ -288,7 +286,6 @@ public class Drivers {
 //        }
 //        as.compareTo(bs);
     }
-
 
 
     // ******* NEWCOMMENT PAGE DRIVERS
