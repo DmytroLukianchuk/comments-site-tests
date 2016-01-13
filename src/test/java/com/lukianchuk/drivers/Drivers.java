@@ -135,6 +135,15 @@ public class Drivers {
     }
 
     // ********** MAIN PAGE DRIVERS
+    public void h1CommentsTextGetColor() {
+        String h1Color = h1CommentsText.getCssValue("color");
+        System.out.println(h1Color);
+
+        System.out.println("Checking that the color of h1 is white");
+        assertEquals("Colors are not equal", "rgba(255, 255, 255, 1)", h1Color);
+
+    }
+
     public void checkTitleIsUnderlined(WebElement webElement) {
         Assert.assertEquals("Element " + webElement + " is not underlined", "underline",
                 webElement.getCssValue("text-decoration"));
@@ -448,15 +457,4 @@ public class Drivers {
         }
         return result;
     }
-
-    // ***** OTHER
-    public void h1CommentsTextGetColor() {
-        String h1Color = h1CommentsText.getCssValue("color");
-        System.out.println(h1Color);
-
-        System.out.println("Checking that the color of h1 is white");
-        assertEquals("Colors are not equal", "rgba(255, 255, 255, 1)", h1Color);
-
-    }
-
 }
