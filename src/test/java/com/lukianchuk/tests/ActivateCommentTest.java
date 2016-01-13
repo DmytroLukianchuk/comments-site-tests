@@ -8,19 +8,6 @@ import static org.junit.Assert.assertEquals;
 
 public class ActivateCommentTest extends Drivers {
 
-
-    public String createCommentsSuccessfulMessage() {
-        String successfulMessage = "";
-        if (SELECT_AN_ACTION.equals("Activate")) {
-            successfulMessage = "Comments was activated successfull";
-            System.out.println(successfulMessage);
-        } else if (SELECT_AN_ACTION.equals("Inactivate")) {
-            successfulMessage = "Comments was inactivated successfull";
-            System.out.println(successfulMessage);
-        }
-        return successfulMessage;
-    }
-
     @Test //#1 - Check the Alert no comment is chosen appears
     public void checkCommentsApplicationDialogOnSelectAnActoinTest() {
         System.out.println("Open Main Page");
@@ -35,7 +22,7 @@ public class ActivateCommentTest extends Drivers {
 
 
     @Test //#2 - Check the Alert no comment is chosen appears
-    public void checkCommentsWasActivatedSuccessfullTest() {
+    public void checkCommentsWasActivatedSuccessfulTest() {
         System.out.println("Open Main Page");
         driver.get(MAIN_PAGE_URL);
 

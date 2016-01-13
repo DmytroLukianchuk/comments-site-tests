@@ -1,6 +1,7 @@
 package com.lukianchuk.drivers;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -26,23 +27,22 @@ public class Drivers {
     public static final String VALID_NUMBER_VALUE = "999";
     public static final String INVALID_NUMBER_VALUE = "abcd";
     public static final String COMMENT_TEXT_EMPTY_ERROR = "The Comment Text field is required.";
-
     public static final String CATEGORY_NAME_DROPDOWN = "Cat1";
     public static final String STATUS_DROPDOWN = "All";
-
     public static final String SELECT_AN_ACTION = "Activate";
-
-
     public static final String NUMBER_FIELD_VALUE_ERROR = "The Number field should contain value from 0 to 999 " +
             "and should be unique";
     public static final String COMMENT_TEXT_NOT_ALPHA_NUM_ERROR = "The Comment Text field should contain " +
             "alphanumeric characters only";
-
     public static final String COMMENT_MUST_HAVE_GROUP_ERROR = "Comments must be assigned to at least one category. " +
             "Please select a category before trying to save this comment again.";
     public static final String COMMENT_WAS_ACTIVETED_MESSAGE = "Comments was activated successfull";
     public static final int NTH_COMMENT_CHECK_BOX = 9;
+
     public WebDriver driver = new FirefoxDriver();
+
+    @FindBy(css = "hr")
+    protected WebElement hrLineDevider;
     @FindBy(xpath = "//th/a[contains(@href,'/?sort=Number')]")
     protected WebElement numberLinkColumnFilter;
     @FindBy(xpath = "//th/a[contains(@href,'/?sort=Text')]")
@@ -53,10 +53,8 @@ public class Drivers {
     protected List<WebElement> categoriesValueColumn;
     @FindBy(id = "SelectedCateg")
     protected WebElement categoryNameDropDown;
-
     @FindBy(id = "commandSelect")
     protected WebElement selectAnAction;
-
     @FindBy(id = "SelectedStatus")
     protected WebElement statusDropDown;
     @FindBy(id = "applybutton")
@@ -66,61 +64,61 @@ public class Drivers {
     @FindBy(id = "infoField")
     protected WebElement commentWasActivatedInactivatedSuccessful;
     @FindBy(xpath = "//input[@value='New...']")
-    WebElement newCommentButton;
+    protected WebElement newCommentButton;
     @FindBy(xpath = "//input[@value='Edit...']")
-    WebElement editCommentButton;
+    protected WebElement editCommentButton;
     @FindBy(xpath = "//input[@value='Delete']")
-    WebElement deleteCommentButton;
+    protected WebElement deleteCommentButton;
     @FindBy(xpath = "//input[@value='Save']")
-    WebElement saveButtonLink;
+    protected WebElement saveButtonLink;
     @FindBy(xpath = "//input[@value='Save & Return']")
-    WebElement saveAndReturnButtonLink;
+    protected WebElement saveAndReturnButtonLink;
     @FindBy(xpath = "//a[@href='/']")
-    WebElement refreshButtonLink;
+    protected WebElement refreshButtonLink;
     @FindBy(name = "Text")
-    WebElement commentTextField;
+    protected WebElement commentTextField;
     @FindBy(xpath = "//input[@id='Number']")
-    WebElement numberInput;
+    protected WebElement numberInput;
     @FindBy(xpath = "//input[@name = 'CurSelect']")
-    WebElement moveRightActionButton;
+    protected WebElement moveRightActionButton;
     @FindBy(xpath = "//a[@href='/']")
-    WebElement returnButton;
+    protected WebElement returnButton;
     @FindBy(id = "errorfield")
-    WebElement errorCommentNotHaveCategory;
+    protected WebElement errorCommentNotHaveCategory;
     @FindBy(id = "errorfield")
-    WebElement errorCommentFieldRequired;
+    protected WebElement errorCommentFieldRequired;
     @FindBy(id = "errorfield")
-    WebElement errorNumberFieldNotValid;
+    protected WebElement errorNumberFieldNotValid;
     @FindBy(id = "errorfield")
-    WebElement errorNotCorrectCommentFieldValue;
+    protected WebElement errorNotCorrectCommentFieldValue;
     @FindBy(xpath = "//input[@value='Duplicate...']")
-    WebElement duplicateButtonLink;
+    protected WebElement duplicateButtonLink;
     @FindBy(id = "Text")
-    WebElement commentsFieldOnDuplicatePage;
+    protected WebElement commentsFieldOnDuplicatePage;
     @FindBy(id = "Number")
-    WebElement numberFieldValueOnDuplicatePage;
+    protected WebElement numberFieldValueOnDuplicatePage;
     @FindBy(id = "infoField")
-    WebElement commentDeletedSuccessfull;
+    protected WebElement commentDeletedSuccessfull;
     @FindBy(xpath = "//div[@role='dialog']")
-    WebElement commentAlert;
+    protected WebElement commentAlert;
     @FindBy(xpath = "//div[@id='selectedCategories']/div[@class='categoryitem']")
-    List<WebElement> selectedCategoriesOnEditCommentPage;
+    protected List<WebElement> selectedCategoriesOnEditCommentPage;
     @FindBy(xpath = "//input[@type='checkbox']")
-    List<WebElement> catCheckboxes;
+    protected List<WebElement> catCheckboxes;
     @FindBy(xpath = "//tr/td[5]")
-    List<WebElement> categoriesOfComment;
+    protected List<WebElement> categoriesOfComment;
     @FindBy(xpath = "//tr/td[3]")
-    List<WebElement> nthCommentValue;
+    protected List<WebElement> nthCommentValue;
     @FindBy(xpath = "//input[@type='checkbox' and @id='Categories']")
-    List<WebElement> availableCatCheckBoxes;
+    protected List<WebElement> availableCatCheckBoxes;
     @FindBy(xpath = "//tr/td[2]")
-    List<WebElement> numbers;
+    protected List<WebElement> numbers;
     @FindBy(xpath = "//tr/td[3]")
-    List<WebElement> commentText;
+    protected List<WebElement> commentText;
     @FindBy(xpath = "//span[@class='ui-button-text']")
-    List<WebElement> alertButtonsOnDeleteAlert;
+    protected List<WebElement> alertButtonsOnDeleteAlert;
     @FindBy(xpath = "//div/h1")
-    WebElement h1CommentsText;
+    protected WebElement h1CommentsText;
 
     public Drivers() {
         PageFactory.initElements(driver, this);
@@ -139,6 +137,11 @@ public class Drivers {
     }
 
     // ********** MAIN PAGE DRIVERS
+    public void checkTitleIsUnderlined(WebElement webElement) {
+        Assert.assertEquals("Element " + webElement + " is not underlined", "underline",
+                webElement.getCssValue("text-decoration"));
+    }
+
     public boolean checkCategoriesHaveFilteringValue(String CATEGORY_NAME_DROPDOWN) {
         for (int i = 1; i <= 10; i++) {
             String commentRow = driver.findElement(By.xpath("//tr[" + i
@@ -289,6 +292,18 @@ public class Drivers {
 
 
     // ******* NEWCOMMENT PAGE DRIVERS
+    public String createCommentsSuccessfulMessage() {
+        String successfulMessage = "";
+        if (SELECT_AN_ACTION.equals("Activate")) {
+            successfulMessage = "Comments was activated successfull";
+            System.out.println(successfulMessage);
+        } else if (SELECT_AN_ACTION.equals("Inactivate")) {
+            successfulMessage = "Comments was inactivated successfull";
+            System.out.println(successfulMessage);
+        }
+        return successfulMessage;
+    }
+
     public void clickSaveButtonLink() {
         saveButtonLink.click();
     }

@@ -2,19 +2,11 @@ package com.lukianchuk.tests;
 
 import com.lukianchuk.drivers.Drivers;
 import org.junit.Test;
-import org.openqa.selenium.WebElement;
-
-import static org.junit.Assert.assertEquals;
 
 public class UnderlinedFilterTitlesTest extends Drivers {
 
-    public void checkTitleIsUnderlined(WebElement webElement) {
-        assertEquals("Element " + webElement + " is not underlined", "underline",
-                webElement.getCssValue("text-decoration"));
-    }
-
     @Test
-    public void checkNumberCommentTextActiveIsUnderlined() {
+    public void checkNumberCommentTextActiveIsUnderlinedTest() {
         System.out.println("Open Main Page");
         driver.get(MAIN_PAGE_URL);
 

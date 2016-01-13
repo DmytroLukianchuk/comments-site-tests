@@ -78,7 +78,7 @@ public class DuplicateCommentTest extends Drivers {
     }
 
     @Test //#5
-    public void commentsApplicationDialog() {
+    public void commentsApplicationDialogTest() {
         System.out.println("Open Main Page");
         driver.get(MAIN_PAGE_URL);
 
